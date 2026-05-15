@@ -217,20 +217,6 @@ credentials). Within that model:
 - FIM source-code modification → self-watcher fires a HIGH alert
 - Discord downtime → alerts queued in SQLite, replayed on recovery
 
-**Honest limitations (documented for the viva):**
-- An attacker with **administrator rights** bypasses every user-mode
-  control. They can read `.env` (HMAC key, webhook URL), kill the FIM
-  process, alter the database directly. This is a fundamental property
-  of single-host OS security, not a defect of the project.
-- The HMAC key lives in `.env` on the same host. Off-host signing
-  (TPM, HSM, or a remote signing service) would close this gap and is
-  documented as future work.
-- The FIM monitors a single host. Multi-host monitoring would require
-  a separate agent architecture.
-- The backup folder is a write-once forensic snapshot. Live folder
-  modifications, renames, and deletions are NOT propagated into the
-  backup. A multi-version backup with copy-before-restore would
-  preserve legitimate user edits and is documented as future work.
 
 ---
 
