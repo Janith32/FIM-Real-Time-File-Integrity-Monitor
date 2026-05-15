@@ -1,33 +1,25 @@
-import hashlib
-import sqlite3
 import os
 from pathlib import Path
 
-DB_PATH = "fim.db"
-MONITOR_PATH = r"D:\FIM_Project123\Web_Server_Files"
+from dotenv import load_dotenv
 
-def hash_file(path):
-    h = hashlib.sha256()
-    with open(path, 'rb') as f:
-        for chunk in iter(lambda: f.read(8192), b''):
-            h.update(chunk)
-    return h.hexdigest()
+from utils import db_connect, hash_file, init_all_tables, get_logger
 
-def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS baseline (
-        path TEXT PRIMARY KEY,
-        hash TEXT,
-        size INTEGER,
-        mtime REAL
-    )''')
-    conn.commit()
-    conn.close()
+load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env",
+            override=True)
+
+# Default to a path next to this script if MONITOR_PATH isn't set.
+MONITOR_PATH = os.getenv(
+    "MONITOR_PATH",
+    str(Path(__file__).resolve().parent / "Web_Server_Files"))
+
+log = get_logger("fim.baseline")
+
 
 def create_baseline(folder):
-    init_db()
-    conn = sqlite3.connect(DB_PATH)
+    
+    init_all_tables()  # ensures baseline table exists
+    conn = db_connect()
     c = conn.cursor()
     count = 0
     for root, dirs, files in os.walk(folder):
@@ -36,16 +28,19 @@ def create_baseline(folder):
             try:
                 file_hash = hash_file(path)
                 stat = os.stat(path)
-                c.execute("INSERT OR REPLACE INTO baseline VALUES (?, ?, ?, ?)",
-                          (path, file_hash, stat.st_size, stat.st_mtime))
+                c.execute(
+                    "INSERT OR REPLACE INTO baseline VALUES (?, ?, ?, ?)",
+                    (path, file_hash, stat.st_size, stat.st_mtime))
                 count += 1
-                print(f"Hashed: {path}")
+                log.info("Hashed: %s", path)
             except Exception as e:
-                print(f"Error hashing {path}: {e}")
+                log.error("Error hashing %s: %s", path, e)
     conn.commit()
     conn.close()
-    print(f"\nBaseline created: {count} files")
+    log.info("Baseline created: %d files", count)
+
 
 if __name__ == "__main__":
     Path(MONITOR_PATH).mkdir(parents=True, exist_ok=True)
+    log.info("Building baseline for: %s", MONITOR_PATH)
     create_baseline(MONITOR_PATH)

@@ -1,0 +1,43 @@
+# requirements.txt — runtime dependencies for the FIM project
+#
+# Install on a fresh venv:
+#
+#     python -m venv venv
+#     # Windows:
+#     .\venv\Scripts\activate
+#     # Linux/macOS:
+#     source venv/bin/activate
+#     pip install -r requirements.txt
+#
+# Version policy: minimum-version pins (>=) rather than exact pins.
+# The system was developed against the versions noted below; newer
+# releases of these libraries are expected to remain compatible
+# because the project relies only on stable, well-established APIs
+# (streamlit session state, watchdog event handlers, reportlab
+# Paragraph/Table, bcrypt hashpw/checkpw, requests.post).  If a
+# future major release breaks something, pin to the last known-good
+# version listed in the comment.
+
+# ── Web dashboard ─────────────────────────────────────────────────────
+streamlit>=1.30,<2          # session_state API, st.metric, st.tabs
+pandas>=2.0                 # DataFrame export, used by dashboard tables
+altair>=5.0                 # transitive but pinned to silence Streamlit warnings
+
+# ── File watcher ──────────────────────────────────────────────────────
+watchdog>=3.0               # Observer + FileSystemEventHandler
+
+# ── PDF report generation ─────────────────────────────────────────────
+reportlab>=4.0              # Paragraph, Table, Spacer, PageBreak, canvas
+
+# ── Discord alerts + config loading ───────────────────────────────────
+requests>=2.31              # HTTP client; uses ConnectionError, Timeout
+python-dotenv>=1.0          # provides `dotenv.load_dotenv`
+
+# ── Authentication ────────────────────────────────────────────────────
+bcrypt>=4.0                 # gensalt(rounds=12), hashpw, checkpw
+
+# ── Test suite (optional but recommended) ─────────────────────────────
+# Used by tests/test_security.py.  The suite also runs in script mode
+# without pytest installed (python tests/test_security.py), so this
+# is genuinely optional.
+pytest>=7.4

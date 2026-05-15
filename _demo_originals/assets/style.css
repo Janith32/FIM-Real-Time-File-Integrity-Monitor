@@ -1,0 +1,68 @@
+/* TechSolutions Lanka - Main Stylesheet */
+/* Version: 2.4.1 | Last updated: 2025-01-10 */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background: #1a3c6e;
+    color: white;
+    padding: 1rem 2rem;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.logo { font-size: 1.5rem; font-weight: bold; color: #f0c040; }
+
+nav ul { list-style: none; display: flex; gap: 2rem; }
+nav ul a { color: white; text-decoration: none; }
+
+.hero {
+    background: linear-gradient(135deg, #1a3c6e, #2563eb);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.hero h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+.btn {
+    display: inline-block;
+    background: #f0c040;
+    color: #1a3c6e;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 1.5rem;
+}
+
+.cards { display: flex; gap: 1.5rem; padding: 2rem; flex-wrap: wrap; }
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    flex: 1;
+    min-width: 220px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+footer {
+    background: #1a3c6e;
+    color: #ccc;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+}

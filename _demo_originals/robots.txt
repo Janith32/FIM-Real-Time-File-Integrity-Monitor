@@ -1,0 +1,10 @@
+# TechSolutions Lanka - robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config.php
+Disallow: /uploads/
+Disallow: /.htaccess
+
+# Sitemap
+Sitemap: https://techsolutions.lk/sitemap.xml
